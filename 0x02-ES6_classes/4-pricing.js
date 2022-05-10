@@ -1,5 +1,5 @@
 /* eslint-disable o-used-vars */
-import Currency from './3-currency.js';
+import Currency from './3-currency';
 
 export default class PRicing {
   constructor(amount,currency) {
