@@ -5,10 +5,11 @@ and returns the average execution time as a float. '''
 
 import asyncio
 import time
+from typing import List
 wait_n = __import__('1-concurrent_coroutines').wait_n
 
 
-def measure_time(n: int, max_delay: int) -> list[float]:
+def measure_time(n: int, max_delay: int) -> List[float]:
     ''' Returns the average execution time as a float
     obtained by measuring the total execution time for
     wait_n(n, max_delay) and dividing it by n. '''
