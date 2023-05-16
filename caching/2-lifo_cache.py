@@ -7,20 +7,18 @@ class LIFOCache(BaseCaching):
         self.keys = []
 
     def put(self, key, item):
-        if key is None or item is None:
+        if not key or not item:
             return
 
         if key in self.cache_data:
-            self.cache_data[key] = item
-        else:
-            if len(self.keys) >= BaseCaching.MAX_ITEMS:
-                discarded_key = self.keys.pop()
-                del self.cache_data[discarded_key]
-                print(f"DISCARD: {discarded_key}")
-            self.cache_data[key] = item
-            self.keys.append(key)
+            self.keys.remove(key)  # Move the updated key to the end
+        elif len(self.keys) == BaseCaching.MAX_ITEMS:
+            discarded_key = self.keys.pop()
+            del self.cache_data[discarded_key]
+            print(f"DISCARD: {discarded_key}")
+
+        self.cache_data[key] = item
+        self.keys.append(key)
 
     def get(self, key):
-        if key is None or key not in self.cache_data:
-            return None
-        return self.cache_data[key]
+        return self.cache_data.get(key, None)
