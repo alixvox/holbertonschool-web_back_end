@@ -12,27 +12,6 @@ import re
 from typing import List
 
 
-def filter_datum(fields: List[str], redaction: str,
-                 message: str, separator: str) -> str:
-    """
-    Obfuscates specified fields in a log message.
-
-    Args:
-        fields (List[str]): A list of fields to obfuscate.
-        redaction (str): A string representing the redaction.
-        message (str): A string representing the log line.
-        separator (str): A string representing the separator character
-        in the log line.
-
-    Returns:
-        str: The obfuscated log message.
-    """
-    for field in fields:
-        message = re.sub(f'{field}=.*?{separator}',
-                         f'{field}={redaction}{separator}', message)
-    return message.rstrip(separator)
-
-
 class RedactingFormatter(logging.Formatter):
     """
     Formatter class for logging module with redaction capability.
@@ -42,7 +21,7 @@ class RedactingFormatter(logging.Formatter):
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
-    SEPARATOR = " ; "  # Added spaces around the ; separator
+    SEPARATOR = ";"  # Added spaces around the ; separator
 
     def __init__(self, fields: List[str]):
         """
@@ -64,6 +43,27 @@ class RedactingFormatter(logging.Formatter):
         Returns:
             str: Formatted log record with specified fields redacted.
         """
-        original_msg = logging.Formatter.format(self, record)
+        original = logging.Formatter.format(self, record)
         return filter_datum(self.fields, self.REDACTION,
-                            original_msg, self.SEPARATOR)
+                            original, self.SEPARATOR)
+
+
+def filter_datum(fields: List[str], redaction: str,
+                 message: str, separator: str) -> str:
+    """
+    Obfuscates specified fields in a log message.
+
+    Args:
+        fields (List[str]): A list of fields to obfuscate.
+        redaction (str): A string representing the redaction.
+        message (str): A string representing the log line.
+        separator (str): A string representing the separator character
+        in the log line.
+
+    Returns:
+        str: The obfuscated log message.
+    """
+    for field in fields:
+        message = re.sub(f'{field}=.+?{separator}',
+                         f'{field}={redaction}{separator}', message)
+    return message
