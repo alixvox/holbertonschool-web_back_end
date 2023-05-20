@@ -13,6 +13,10 @@ class BasicAuth(Auth):
     BasicAuth class
     """
 
+    def __init__(self):
+        super().__init__()
+        User.load_from_file()
+
     def current_user(self, request=None) -> TypeVar('User'):
         """Retrieves the User instance for a request.
 
