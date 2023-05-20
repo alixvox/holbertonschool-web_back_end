@@ -14,6 +14,15 @@ class BasicAuth(Auth):
     """
 
     def current_user(self, request=None) -> TypeVar('User'):
+        """Retrieves the User instance for a request.
+
+        Args:
+            request (Request): Flask request object (default: None).
+
+        Returns:
+            TypeVar('User'): The User instance if
+            authenticated, None otherwise.
+        """
         if not request:
             return None
         header = self.authorization_header(request)
@@ -24,7 +33,9 @@ class BasicAuth(Auth):
 
     def decode_base64_authorization_header(
             self, base64_authorization_header: str) -> str:
-        """returns the decoded value of a Base64 string"""
+        """
+        returns the decoded value of a Base64 string
+        """
         if base64_authorization_header is None:
             return None
         if type(base64_authorization_header) is not str:
@@ -69,6 +80,15 @@ class BasicAuth(Auth):
     def user_object_from_credentials(
             self, user_email: Optional[str], user_pwd: Optional[str]
             ) -> TypeVar('User'):
+        """Returns the User instance based on email and password.
+
+        Args:
+            user_email (str): Email of the user.
+            user_pwd (str): Password of the user.
+
+        Returns:
+            TypeVar('User'): The User instance if found, None otherwise.
+        """
         if not user_email or not isinstance(user_email, str):
             return None
         if not user_pwd or not isinstance(user_pwd, str):
