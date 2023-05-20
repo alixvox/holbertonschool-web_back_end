@@ -25,6 +25,7 @@ else:
 
 @app.before_request
 def before_request_func():
+    """Function executed before each request."""
     if auth is None:
         return
 
