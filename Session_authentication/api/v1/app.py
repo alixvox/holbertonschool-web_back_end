@@ -5,7 +5,7 @@ Route module for the API
 from os import getenv
 from api.v1.views import app_views
 from api.v1.auth.auth import Auth
-from flask import Flask, jsonify, abort, request
+from flask import Flask, jsonify, abort, request, g
 from flask_cors import (CORS, cross_origin)
 from os import getenv
 
@@ -28,8 +28,8 @@ def before_request_func():
     if auth is None:
         return
 
-    allowed_paths = ['/api/v1/status/', '/api/v1/unauthorized/\
-                     ', '/api/v1/forbidden/']
+    allowed_paths = ['/api/v1/status/', '/api/v1/unauthorized/',
+                     '/api/v1/forbidden/']
     if not auth.require_auth(request.path, allowed_paths):
         return
 
@@ -38,6 +38,7 @@ def before_request_func():
 
     # Assign the result of auth.current_user(request) to request.current_user
     request.current_user = auth.current_user(request)
+    print(f'current_user: {request.current_user}')  # Add this line
 
     if request.current_user is None:
         abort(403)
