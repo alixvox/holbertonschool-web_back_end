@@ -5,7 +5,7 @@ Route module for the API
 from os import getenv
 from api.v1.views import app_views
 from api.v1.auth.auth import Auth
-from flask import Flask, jsonify, abort, request, g
+from flask import Flask, jsonify, abort, request
 from flask_cors import (CORS, cross_origin)
 from os import getenv
 
@@ -23,6 +23,7 @@ else:
     auth = Auth()
 
 
+@app.before_request
 def before_request_func():
     """Function executed before each request."""
     if auth is None:
@@ -38,7 +39,6 @@ def before_request_func():
 
     # Assign the result of auth.current_user(request) to request.current_user
     request.current_user = auth.current_user(request)
-    print(f'current_user: {request.current_user}')  # Add this line
 
     if request.current_user is None:
         abort(403)
