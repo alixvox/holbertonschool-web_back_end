@@ -2,11 +2,10 @@
 """
 SessionAuth view
 """
-from api.v1.views import app_views
 from flask import abort, jsonify, request
 from models.user import User
-from api.v1.app import auth
 from os import getenv
+from api.v1.views import app_views
 
 
 @app_views.route('/auth_session/login', methods=['POST'], strict_slashes=False)
@@ -25,6 +24,8 @@ def login():
     Otherwise, creates a Session ID for the User ID, sets the cookie
     to the response, and returns the dictionary representation of the User.
     """
+
+    from api.v1.app import auth
 
     email = request.form.get('email')
     if not email:
