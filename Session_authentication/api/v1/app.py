@@ -23,21 +23,23 @@ else:
     auth = Auth()
 
 
-@app.before_request
 def before_request_func():
     """Function executed before each request."""
     if auth is None:
         return
 
-    allowed_paths = ['/api/v1/status/', '/api/v1/unauthorized/',
-                     '/api/v1/forbidden/']
+    allowed_paths = ['/api/v1/status/', '/api/v1/unauthorized/\
+                     ', '/api/v1/forbidden/']
     if not auth.require_auth(request.path, allowed_paths):
         return
 
     if auth.authorization_header(request) is None:
         abort(401)
 
-    if auth.current_user(request) is None:
+    # Assign the result of auth.current_user(request) to request.current_user
+    request.current_user = auth.current_user(request)
+
+    if request.current_user is None:
         abort(403)
 
 
