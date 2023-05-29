@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """ Base module
 """
 from sqlalchemy import Column, Integer, String
