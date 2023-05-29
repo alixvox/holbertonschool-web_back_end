@@ -47,3 +47,19 @@ def login():
     response = jsonify(user.to_json())
     response.set_cookie(getenv('SESSION_NAME'), session_id)
     return response
+
+
+@app_views.route('/auth_session/logout',
+                 methods=['DELETE'], strict_slashes=False)
+def logout():
+    """
+    Handles the DELETE /auth_session/logout route.
+    Deletes the Session ID contained in the request as a cookie.
+    Returns an empty JSON dictionary with the status code 200 if
+    the session was destroyed, aborts with a 404 error otherwise.
+    """
+    from api.v1.app import auth
+    if auth.destroy_session(request):
+        return jsonify({}), 200
+    else:
+        abort(404)
