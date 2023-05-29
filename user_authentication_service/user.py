@@ -9,7 +9,6 @@ Base = declarative_base()
 class User(Base):
     """
     User model for a database table named users.
-
     Attributes:
         id (Integer): The user's id. It serves as the primary key.
         email (String): The user's email. It cannot be null.
@@ -18,7 +17,6 @@ class User(Base):
         reset_token (String): The user's reset token. It can be null.
     """
     __tablename__ = 'users'
-
     id = Column(Integer, primary_key=True)
     email = Column(String(250), nullable=False)
     hashed_password = Column(String(250), nullable=False)
