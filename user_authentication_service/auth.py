@@ -10,6 +10,15 @@ import bcrypt
 import uuid
 
 
+def _hash_password(password: str) -> bytes:
+    """Hash a password
+    """
+    salt = bcrypt.gensalt()
+    hashed_password = bcrypt.hashpw(password.encode(), salt)
+
+    return hashed_password
+
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -21,14 +30,6 @@ class Auth:
         """Generate a new UUID
         """
         return str(uuid.uuid4())
-
-    def _hash_password(self, password: str) -> bytes:
-        """Hash a password
-        """
-        salt = bcrypt.gensalt()
-        hashed_password = bcrypt.hashpw(password.encode(), salt)
-
-        return hashed_password
 
     def create_session(self, email: str) -> str:
         """Create a new session
