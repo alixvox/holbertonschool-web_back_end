@@ -6,6 +6,9 @@ from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm.exc import NoResultFound
+from sqlalchemy.exc import InvalidRequestError
+
 
 from user import User, Base
 
@@ -44,3 +47,37 @@ class DB:
             self._session.rollback()
             raise
         return user
+
+    def find_user_by(self, **kwargs) -> User:
+        """Find a user instance in the session DB
+        """
+        if not kwargs:
+            raise InvalidRequestError
+
+        try:
+            user = self._session.query(User).filter_by(**kwargs).first()
+            if user is None:
+                raise NoResultFound
+        except InvalidRequestError:
+            raise
+
+        return user
+
+    def update_user(self, user_id: int, **kwargs) -> None:
+        """Update a user instance in the session DB
+        """
+        if not kwargs:
+            return None
+
+        try:
+            user = self.find_user_by(id=user_id)
+        except NoResultFound:
+            raise
+
+        for key, value in kwargs.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
+            else:
+                raise ValueError
+
+        self._session.commit()
