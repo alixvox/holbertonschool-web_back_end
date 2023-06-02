@@ -1,0 +1,1 @@
+In this project, I will learn all about internationalization (i18n)!
