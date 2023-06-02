@@ -77,10 +77,10 @@ class TestGithubOrgClient(unittest.TestCase):
 
 
 @parameterized_class([
-        {"org_payload": fixtures.org_payload,
-            "repos_payload": fixtures.repos_payload,
-            "expected_repos": fixtures.expected_repos,
-            "apache2_repos": fixtures.apache2_repos}
+    {"org_payload": fixtures.org_with_payload,
+     "repos_payload": fixtures.repos_payload,
+     "expected_repos": fixtures.repos,
+     "apache2_repos": fixtures.repos_with_payload}
 ])
 class TestIntegrationGithubOrgClient(unittest.TestCase):
     """
