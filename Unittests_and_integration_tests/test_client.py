@@ -8,6 +8,7 @@ import fixtures
 from unittest.mock import patch, Mock, PropertyMock
 from parameterized import parameterized, parameterized_class
 from client import GithubOrgClient
+import requests
 
 
 class TestGithubOrgClient(unittest.TestCase):
@@ -77,10 +78,10 @@ class TestGithubOrgClient(unittest.TestCase):
 
 
 @parameterized_class([
-    {"org_payload": fixtures.org_with_payload,
-     "repos_payload": fixtures.repos_payload,
-     "expected_repos": fixtures.repos,
-     "apache2_repos": fixtures.repos_with_payload}
+    {"org_payload": fixtures.TEST_PAYLOAD[0][0],
+     "repos_payload": fixtures.TEST_PAYLOAD[0][1],
+     "expected_repos": fixtures.TEST_PAYLOAD[0][2],
+     "apache2_repos": fixtures.TEST_PAYLOAD[0][2]}
 ])
 class TestIntegrationGithubOrgClient(unittest.TestCase):
     """
@@ -93,17 +94,13 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         Set up the class with mocked requests.get.
         """
         cls.get_patcher = patch('requests.get')
-        cls.get_mock = cls.get_patcher.start()
+        cls.get_patcher.start()
 
-        def side_effect(url):
-            if url.endswith("/orgs/org"):
-                return Mock(json=lambda: cls.org_payload)
-            elif url.endswith("/orgs/org/repos"):
-                return Mock(json=lambda: cls.repos_payload)
-            else:
-                return Mock(json=lambda: [])
-
-        cls.get_mock.side_effect = side_effect
+        cls.mock_get = requests.get
+        cls.mock_get.return_value.json.side_effect = [
+            cls.org_payload, cls.repos_payload,
+            cls.expected_repos, cls.apache2_repos
+        ]
 
     @classmethod
     def tearDownClass(cls):
@@ -111,3 +108,13 @@ class TestIntegrationGithubOrgClient(unittest.TestCase):
         Tear down the class by stopping the patcher.
         """
         cls.get_patcher.stop()
+
+    def test_public_repos(self):
+        """
+        Test that GithubOrgClient.public_repos
+        returns the correct list of repos.
+        """
+        github_org_client = GithubOrgClient('google')
+        self.assertEqual(github_org_client.org, self.org_payload)
+        self.assertEqual(github_org_client.repos_payload, self.repos_payload)
+        self.assertEqual(github_org_client.public_repos(), self.expected_repos)
