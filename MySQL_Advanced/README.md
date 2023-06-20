@@ -1,0 +1,1 @@
+In this project, I'll be doing more stuff with MySQL!
