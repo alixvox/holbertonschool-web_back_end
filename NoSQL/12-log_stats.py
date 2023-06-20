@@ -13,7 +13,7 @@ def log_stats():
     for method in methods:
         print(f"\tmethod {method}:",
               f"{mongoLog.count_documents({'method': method})}")
-    print(f"{mongoLog.count_documents({'method': 'GET', 'path': '/status'})} ",
+    print(f"{mongoLog.count_documents({'method': 'GET', 'path': '/status'})}",
           f"status check")
 
 
