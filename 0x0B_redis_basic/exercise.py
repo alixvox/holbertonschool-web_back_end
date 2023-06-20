@@ -72,7 +72,8 @@ class Cache:
 
 def replay(method: Callable):
     """ Display the history of calls of a particular function """
-    cache = Cache()
+    # Get the Cache instance from the method's __self__ attribute
+    cache = method.__self__
     inputs = cache._redis.lrange(f"{method.__qualname__}:inputs", 0, -1)
     outputs = cache._redis.lrange(f"{method.__qualname__}:outputs", 0, -1)
 
