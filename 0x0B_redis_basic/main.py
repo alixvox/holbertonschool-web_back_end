@@ -1,16 +1,16 @@
 #!/usr/bin/env python3
-"""
-Main file
-"""
-import redis
+""" main.py """
 
-Cache = __import__('exercise').Cache
+from exercise import Cache, replay
 
+# Create a Cache instance
 cache = Cache()
 
-data = b"hello"
-key = cache.store(data)
-print(key)
+# Call the store method a few times
+cache.store("foo")
+cache.store("bar")
+cache.store("egg")
+cache.store("eggsperiment")
 
-local_redis = redis.Redis()
-print(local_redis.get(key))
+# Now replay the store method
+replay(cache.store)
