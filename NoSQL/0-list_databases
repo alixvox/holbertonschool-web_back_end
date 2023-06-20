@@ -1,2 +1,2 @@
 // lists all MongoDB databases
-db.adminCommand( { listDatabases: 1 } )
+printjson(db.adminCommand('listDatabases').databases.map(db => db.name))
