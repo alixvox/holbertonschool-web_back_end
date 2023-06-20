@@ -69,12 +69,14 @@ class Cache:
         value = self._redis.get(key)
         return int(value)
 
-    def replay(self, method: Callable):
-        """ Display the history of calls of a particular function """
-        inputs = self._redis.lrange(f"{method.__qualname__}:inputs", 0, -1)
-        outputs = self._redis.lrange(f"{method.__qualname__}:outputs", 0, -1)
 
-        print(f"{method.__qualname__} was called {len(inputs)} times:")
-        for inp, out in zip(inputs, outputs):
-            print(f"{method.__qualname__}(*{inp.decode(50-'utf-8')})")
-            print(f"-> {out.decode('utf-8')}")
+def replay(method: Callable):
+    """ Display the history of calls of a particular function """
+    cache = Cache()
+    inputs = cache._redis.lrange(f"{method.__qualname__}:inputs", 0, -1)
+    outputs = cache._redis.lrange(f"{method.__qualname__}:outputs", 0, -1)
+
+    print(f"{method.__qualname__} was called {len(inputs)} times:")
+    for inp, out in zip(inputs, outputs):
+        print(f"{method.__qualname__}(*{inp.decode('utf-8')})")
+        print(f"-> {out.decode('utf-8')}")
