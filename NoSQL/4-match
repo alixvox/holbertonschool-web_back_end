@@ -1,0 +1,6 @@
+// finds all documents with name:"Holberton school" pair in "school" collection
+db.school.find(
+	{
+		name: "Holberton school"
+	}
+)

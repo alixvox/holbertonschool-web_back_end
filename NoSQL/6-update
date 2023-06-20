@@ -1,0 +1,12 @@
+// updates document(s) in the "school" collection that has name:"Holberton school" pair
+db.school.update(
+	{
+		name: "Holberton school"
+	},
+	{ 
+		$set: {address: "972 Mission street"} 
+	},
+	{
+		multi: true
+	}
+)
