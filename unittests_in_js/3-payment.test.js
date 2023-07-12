@@ -1,20 +1,20 @@
 const sinon = require('sinon');
+const { assert } = require('chai');
 const sendPaymentRequestToApi = require('./3-payment');
 const Utils = require('./utils');
-const { assert } = require('chai');
 
-describe('sendPaymentRequestToApi', function() {
+describe('sendPaymentRequestToApi', () => {
   let consoleSpy;
 
-  beforeEach(function() {
+  beforeEach(() => {
     consoleSpy = sinon.spy(console, 'log');
   });
 
-  afterEach(function() {
+  afterEach(() => {
     consoleSpy.restore();
   });
 
-  it('validate the usage of the Utils function', function() {
+  it('validate the usage of the Utils function', () => {
     const calculateNumberSpy = sinon.spy(Utils, 'calculateNumber');
     sendPaymentRequestToApi(100, 20);
 

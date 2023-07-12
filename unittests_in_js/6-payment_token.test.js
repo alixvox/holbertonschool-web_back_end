@@ -1,8 +1,8 @@
-const getPaymentTokenFromAPI = require('./6-payment_token');
 const { expect } = require('chai');
+const getPaymentTokenFromAPI = require('./6-payment_token');
 
-describe('getPaymentTokenFromAPI', function() {
-  it('checks the resolved promise', function(done) {
+describe('getPaymentTokenFromAPI', () => {
+  it('checks the resolved promise', (done) => {
     getPaymentTokenFromAPI(true)
       .then((response) => {
         expect(response).to.include({ data: 'Successful response from the API' });
