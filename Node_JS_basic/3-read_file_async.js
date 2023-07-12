@@ -7,10 +7,10 @@ async function countStudents(path) {
     let count = 0;
     let csCount = 0;
     let sweCount = 0;
-    let csStudents = [];
-    let sweStudents = [];
+    const csStudents = [];
+    const sweStudents = [];
 
-    for (let i = 1; i < lines.length; i++) {
+    for (let i = 1; i < lines.length; i += 1) {
       const line = lines[i].trim();
       if (line !== '') { // Ignore empty lines
         const student = line.split(',');

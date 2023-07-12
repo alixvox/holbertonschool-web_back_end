@@ -5,20 +5,18 @@ async function readDatabase() {
   const lines = data.split('\n');
   const fields = {};
 
-  for (let i = 1; i < lines.length; i++) {
+  for (let i = 1; i < lines.length; i += 1) {
     const student = lines[i].split(',');
     const name = student[0];
     const field = student[3];
 
-    if (!name || !field) {
-      continue;  // Ignore lines with missing or improperly formatted data
-    }
+    if (name && field) {
+      if (!fields[field]) {
+        fields[field] = [];
+      }
 
-    if (!fields[field]) {
-      fields[field] = [];
+      fields[field].push(name);
     }
-
-    fields[field].push(name);
   }
 
   return fields;
