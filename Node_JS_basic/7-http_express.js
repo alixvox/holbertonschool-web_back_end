@@ -13,7 +13,7 @@ app.get('/students', async (req, res) => {
     const data = await countStudents('database.csv');
     res.send(`This is the list of our students\n${data}`);
   } catch (error) {
-    res.send(`This is the list of our students\n${error.message}`);
+    res.send(error.message);
   }
 });
 
