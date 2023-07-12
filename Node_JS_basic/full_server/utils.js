@@ -1,29 +1,27 @@
 const fs = require('fs').promises;
 
 async function readDatabase() {
-    const path = process.argv[2];
-    try {
-        const data = await fs.readFile(path, 'utf8');
-        const lines = data.split('\n');
-        const students = lines.filter((line, index) => index !== 0 && line.trim() !== ''); // Ignoring header and empty lines
-        const fields = {};
+  const data = await fs.readFile(process.argv[2], 'utf8');
+  const lines = data.split('\n');
+  const fields = {};
 
-        for (let i = 0; i < students.ltngth; i++) {
-            const student = students[i].split(', ');
-            const field = student[3];
-            const name = student[0];
+  for (let i = 1; i < lines.length; i++) {
+    const student = lines[i].split(',');
+    const name = student[0];
+    const field = student[3];
 
-            if (!fields[field]) {
-                fields[field] = [];
-            }
-
-            fields[field].push(name);
-        }
-
-        return fields;
-    } catch (err) {
-        throw new Error('Cannot load the database')
+    if (!name || !field) {
+      continue;  // Ignore lines with missing or improperly formatted data
     }
+
+    if (!fields[field]) {
+      fields[field] = [];
+    }
+
+    fields[field].push(name);
+  }
+
+  return fields;
 }
 
 module.exports = readDatabase;
